@@ -1,0 +1,23 @@
+version: '3.1'
+services:
+  app:
+    container_name: mb-account
+    image: springboot-app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  db:
+    image: db-account
+    build:
+      context: ./
+      dockerfile: DockerFile.postgres
+    ports:
+      - "5436:5436"
+    environment:
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=user
