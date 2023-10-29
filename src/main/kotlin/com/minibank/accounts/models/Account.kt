@@ -13,10 +13,13 @@ class Account {
     var id: Int = 0
 
     @Column
+    var userId: String = ""
+
+    @Column
     var ownerName: String = ""
 
     @Column
-    var acnumber: Int = 0
+    var accnumber: String = ""
 
     @Column
     var accountName: String = ""

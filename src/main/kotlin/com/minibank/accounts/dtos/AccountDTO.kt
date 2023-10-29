@@ -4,14 +4,14 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 class AccountDTO {
 
-    @Schema(description = "Идентификатор счета")
-    val id: Int = 0
+    @Schema(description = "Идентификатор клиента")
+    val userId: String = ""
 
     @Schema(description = "Идентификатор владельца счета")
     val ownerName: String = ""
 
     @Schema(description = "Номер счета")
-    val acnumber: Int = 0
+    val accnumber: String = ""
 
     @Schema(description = "Наименование счета")
     val accountName: String = ""

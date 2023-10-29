@@ -1,23 +1,56 @@
-version: '3.1'
+version: '3.9'
 services:
-  app:
-    container_name: mb-account
-    image: springboot-app
+
+  nginx:
+    image: nginx:1.25.2-alpine
+    container_name: nginx-acc
+    volumes:
+      - /var/log/nginx:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      #   - ./nginx/index.html:/etc/nginx/index.html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "81:81"
+    hostname: nginx-acc
+    networks:
+      - network1
+    depends_on:
+      - account-app
+      - account-db
+    restart: unless-stopped
+
+  account-app:
+    container_name: account-app
+    image: account-app
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8001:8001"
     depends_on:
-      - db
-  db:
-    image: db-account
+      - account-db
+    networks:
+      - network1
+    restart: unless-stopped
+
+  account-db:
+    container_name: account-db
+    image: account-db
     build:
       context: ./
-      dockerfile: DockerFile.postgres
+      dockerfile: Dockerfile.postgres
     ports:
-      - "5436:5436"
+      - "5434:5434"
     environment:
       - PGDATA=/var/lib/postgresql/data
       - POSTGRES_PASSWORD=123456
       - POSTGRES_USER=user
+    networks:
+      - network1
+    restart: unless-stopped
+
+
+networks:
+  network1:
+    name: network1
+    driver: bridge

@@ -2,10 +2,15 @@ package com.minibank.accounts.repositories
 
 import com.minibank.accounts.models.Account
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.transaction.annotation.Transactional
 
-interface UserRepository : JpaRepository<Account, Int> {
-    fun findByEmail(email: String): Account? {
+interface AccountRepository : JpaRepository<Account, Int> {
 
-        return TODO("Provide the return value")
+    @Transactional
+    fun findByAccnumber(accnumber: String): String? {
+
+        return "Счет успешно создан"
+
     }
+
 }
