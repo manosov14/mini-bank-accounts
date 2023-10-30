@@ -8,9 +8,6 @@ interface AccountRepository : JpaRepository<Account, Int> {
 
     @Transactional
     fun findByAccnumber(accnumber: String): String? {
-
         return "Счет успешно создан"
-
     }
-
 }

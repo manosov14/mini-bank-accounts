@@ -15,7 +15,7 @@ class AccountService(
     val accountRepository: AccountRepository
 ) {
 
-    fun create(account: Account): Account? {
+    fun create(account: Account): Account {
         return this.accountRepository.save(account)
     }
 
@@ -24,7 +24,7 @@ class AccountService(
             this.accountRepository.findByIdOrNull(id)
             ResponseEntity.ok(this.accountRepository.deleteById(id))
         } catch (e: Exception) {
-             ResponseEntity.badRequest().body(Message ("Account with id $id not found"))
+            ResponseEntity.badRequest().body(Message("Account with id $id not found"))
         }
     }
 
@@ -38,12 +38,33 @@ class AccountService(
         existingAccount.accnumber = body.accnumber
         existingAccount.ownerName = body.ownerName
         existingAccount.accountName = body.accountName
-
         try {
-            accountRepository.findByIdOrNull(id)
             accountRepository.save(existingAccount)
         } catch (e: Exception) {
             ResponseEntity.badRequest().body(Message("Счет не найден"))
         }
+    }
+
+    fun findById(id: Int) : AccountDTO? {
+        val account = accountRepository.findByIdOrNull(id) ?: return null
+        return map(account)
+    }
+
+    fun findAll(): List<AccountDTO> {
+        return accountRepository.findAll().map(this::map)
+    }
+
+    private fun map(account: Account?) : AccountDTO {
+        val accountDTO = AccountDTO()
+        accountDTO.accountName = account?.accountName
+        accountDTO.ownerName = account?.ownerName
+        accountDTO.ammount = account?.ammount
+        accountDTO.ownerName = account?.ownerName
+        accountDTO.accnumber = account?.accnumber
+        accountDTO.percent = account?.percent
+        accountDTO.currency = account?.currency
+        accountDTO.term = account?.term
+        accountDTO.userId = account?.userId
+        return accountDTO
     }
 }

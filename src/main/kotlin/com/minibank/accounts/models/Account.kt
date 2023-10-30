@@ -13,27 +13,27 @@ class Account {
     var id: Int = 0
 
     @Column
-    var userId: String = ""
+    var userId: String? = ""
 
     @Column
-    var ownerName: String = ""
+    var ownerName: String? = ""
 
     @Column
-    var accnumber: String = ""
+    var accnumber: String? = ""
 
     @Column
-    var accountName: String = ""
+    var accountName: String? = ""
 
     @Column
-    var ammount: Double = 0.00
+    var ammount: Double? = 0.00
 
     @Column
-    var percent: Double = 0.00
+    var percent: Double? = 0.00
 
     @Column
-    var term: Int = 0
+    var term: Int? = 0
 
     @Column
-    var currency: String = ""
+    var currency: String? = ""
 
 }

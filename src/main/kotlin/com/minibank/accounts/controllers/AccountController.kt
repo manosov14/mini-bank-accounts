@@ -6,7 +6,7 @@ import com.minibank.accounts.models.Account
 import com.minibank.accounts.service.AccountService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,15 +17,17 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+/*//  TODO Нативный инструмент тоглинга spring, заменить на отдельный provider
+@ConditionalOnProperty(prefix = "feature.toggles", name = ["account"], havingValue = "true")*/
+
 @RestController
 @RequestMapping("api/v1/accounts")
-
-//  TODO Нативный инструмент тоглинга spring, заменить на отдельный provider
-@ConditionalOnProperty(prefix = "feature.toggles", name = ["account"], havingValue = "true")
-
 class AccountController(
     val accountService: AccountService,
 ) {
+
+    private val accountCanDelete: String = "accountCanDelete"
+    private val accountCanUpdate: String = "accountCanUpdate"
 
     @Tag(
         name = "Счета",
@@ -38,8 +40,7 @@ class AccountController(
         val account = Account()
 
         // Длина счета
-        val accnumValidation = body.accnumber.length >= 20
-
+        val accnumValidation = body.accnumber!!.length >= 20
 
         @Operation(description = "Владелец счета") // TODO на вход принимать jwt и информацию о userId и владельце получать оттуда
         account.ownerName = body.ownerName
@@ -64,44 +65,52 @@ class AccountController(
 
         // Проверка на длину в 20 символов
         if (accnumValidation) {
-            return ResponseEntity.ok(this.accountService.create(account))
+            return ResponseEntity.status(HttpStatus.CREATED).body(this.accountService.create(account))
         } else {
-            return ResponseEntity.ok().body(Message("Номер счета должен иметь 20 символов"))
+            return ResponseEntity.badRequest().body(Message("Номер счета должен иметь 20 символов"))
         }
     }
-
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Закрытие (удаление) счета") // TODO проверять не только по id счета, но и по userId из JWT
     fun deleteAccount(@PathVariable id: Int) {
+
         accountService.deleteAccount(id)
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Обновление данных по счету") // TODO проверять не только по id счета, но и по userId из JWT
-    fun updateAccount(@PathVariable id: Int, @RequestBody body: AccountDTO) {
+    fun updateAccount(@PathVariable id: Int, @RequestBody body: AccountDTO): ResponseEntity<Any> {
+
+            return ResponseEntity.ok().body("FT $accountCanUpdate off")
+
 
         // Длина счета
-        val accnumValidation = body.accnumber.length >= 20
-
+        val accnumValidation = body.accnumber!!.length >= 20
 
         // Проверка на длину в 20 символов
         if (accnumValidation) {
-            accountService.updateAccount(id, body) } else {
-            ResponseEntity.ok().body(Message("Номер счета должен иметь 20 символов"))
+            accountService.updateAccount(id, body)
+            return ResponseEntity.ok().build()
+        } else {
+            return ResponseEntity.badRequest().body(Message("Номер счета должен иметь 20 символов"))
         }
     }
 
-
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации по конкретному счету") // TODO проверять не только по id счета, но и по userId из JWT
-    fun getAccount() {
-
+    fun getAccount(@PathVariable id: Int): ResponseEntity<AccountDTO?> {
+        val account = accountService.findById(id)
+        if (account != null) {
+            return ResponseEntity.ok(account)
+        } else {
+            return ResponseEntity.notFound().build()
+        }
     }
 
     @GetMapping()
     @Operation(summary = "Получение списка всех счетов с детальной информацией ") // TODO возвращать все счета userId из JWT
-
-    fun getAccounts() {
+    fun getAccounts(): ResponseEntity<List<AccountDTO>> {
+        return ResponseEntity.ok(accountService.findAll())
     }
 }
