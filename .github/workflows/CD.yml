@@ -72,7 +72,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_SERVER_IP }}
           username: ${{ secrets.SSH_SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/accounts-minibank:latest
             /bin/bash deploy.sh
