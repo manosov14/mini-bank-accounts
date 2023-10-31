@@ -4,13 +4,13 @@ features:
     enabled: true
   accountCanDelete:
     name: "accountCanDelete"
-    enabled: false
+    enabled: true
   accountCanUpdate:
     name: "accountCanUpdate"
-    enabled: false
+    enabled: true
   accountCanGet:
     name: "accountCanGet"
-    enabled: false
+    enabled: true
   accountsCanGet:
     name: "accountsCanGet"
-    enabled: false
+    enabled: true
