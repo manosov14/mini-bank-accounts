@@ -58,8 +58,8 @@ jobs:
           context: .
           file: ./Dockerfile_prod
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/user-minibank:latest
-          labels: ${{ secrets.DOCKERHUB_USERNAME }}/user-minibank:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/accounts-minibank:latest
+          labels: ${{ secrets.DOCKERHUB_USERNAME }}/accounts-minibank:latest
   deploy:
     needs: build
     name: Deploy
