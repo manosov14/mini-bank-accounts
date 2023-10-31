@@ -77,4 +77,3 @@ jobs:
           script: |
             docker rmi -f manosov/accounts-minibank
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/accounts-minibank:latest
-            ./deploy.sh
