@@ -1,0 +1,16 @@
+features:
+  accountCanCreate:
+    name: "accountCanCreate"
+    enabled: true
+  accountCanDelete:
+    name: "accountCanDelete"
+    enabled: false
+  accountCanUpdate:
+    name: "accountCanUpdate"
+    enabled: false
+  accountCanGet:
+    name: "accountCanGet"
+    enabled: false
+  accountsCanGet:
+    name: "accountsCanGet"
+    enabled: false
