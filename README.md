@@ -34,7 +34,7 @@
 host://swagger-ui/index.htm
 ## CI
 ### Workflow
-https://github.com/manosov14/mini-bank-auth/blob/master/.github/workflows/CI.yml
+https://github.com/manosov14/mini-bank-accounts/blob/master/.github/workflows/CI.yml
 
 | Branch  | Starus |
 |---------|--|
@@ -43,7 +43,7 @@ https://github.com/manosov14/mini-bank-auth/blob/master/.github/workflows/CI.yml
 
 ## CD
 ### Workflow
-https://github.com/manosov14/mini-bank-auth/blob/master/.github/workflows/CD.yml
+https://github.com/manosov14/mini-bank-accounts/blob/master/.github/workflows/CD.yml
 
 | Branch  | Starus |
 |---------|--|
