@@ -1,4 +1,4 @@
-name: CI
+name: CI account service
 on:
   workflow_dispatch: null
   push:

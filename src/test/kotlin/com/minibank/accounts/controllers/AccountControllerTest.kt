@@ -25,6 +25,7 @@ class AccountControllerTest : BaseTest() {
 
     @Test
     fun createAccount_ok() {
+        whenever(ftService.isEnabled(any())).thenReturn(true)
         whenever(accService.create(any())).thenReturn(makeAccount())
         val responseEntity = subj.createAccount(makeAccountDTO())
         Assertions.assertEquals(201, responseEntity.statusCode.value())
@@ -32,6 +33,7 @@ class AccountControllerTest : BaseTest() {
 
     @Test
     fun createAccount_wrongAccNumLenght() {
+        whenever(ftService.isEnabled(any())).thenReturn(true)
         val accountDTO = makeAccountDTO()
         accountDTO.accnumber = "1000"
         val responseEntity = subj.createAccount(accountDTO)
@@ -57,6 +59,7 @@ class AccountControllerTest : BaseTest() {
 
     @Test
     fun getAccount_ok() {
+        whenever(ftService.isEnabled(any())).thenReturn(true)
         whenever(accService.findById(any())).thenReturn(makeAccountDTO())
         val responseEntity = subj.getAccount(id = 1)
         Assertions.assertEquals(200, responseEntity.statusCode.value())
@@ -64,6 +67,7 @@ class AccountControllerTest : BaseTest() {
 
     @Test
     fun getAccount_notFound() {
+        whenever(ftService.isEnabled(any())).thenReturn(true)
         whenever(accService.findById(any())).thenReturn(null)
         val responseEntity = subj.getAccount(id = 1)
         Assertions.assertEquals(404, responseEntity.statusCode.value())
