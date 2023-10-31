@@ -1,0 +1,7 @@
+features:
+  accountCanDelete:
+    name: "accountCanDelete"
+    enabled: true
+  accountCanUpdate:
+    name: "accountCanUpdate"
+    enabled: false

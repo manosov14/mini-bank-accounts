@@ -2,7 +2,9 @@ package com.minibank.accounts.controllers
 
 import com.minibank.accounts.BaseTest
 import com.minibank.accounts.service.AccountService
+import com.minibank.accounts.service.FTService
 import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.doNothing
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -18,6 +20,8 @@ class AccountControllerTest : BaseTest() {
     @Mock
     private lateinit var accService: AccountService
 
+    @Mock
+    private lateinit var ftService: FTService
 
     @Test
     fun createAccount_ok() {
@@ -34,6 +38,22 @@ class AccountControllerTest : BaseTest() {
         Assertions.assertEquals(400, responseEntity.statusCode.value())
     }
 
+    @Test
+    fun updateAccount_ok() {
+        doNothing().whenever(accService).updateAccount(any(), any())
+        whenever(ftService.isEnabled(any())).thenReturn(true)
+        val responseEntity = subj.updateAccount(id = 1, body = makeAccountDTO())
+        Assertions.assertEquals(200, responseEntity.statusCode.value())
+    }
+
+    @Test
+    fun updateAccount_wrongAccNumLenght() {
+        whenever(ftService.isEnabled(any())).thenReturn(true)
+        val accountDTO = makeAccountDTO()
+        accountDTO.accnumber = "1010"
+        val responseEntity = subj.updateAccount(id = 1, body = accountDTO)
+        Assertions.assertEquals(400, responseEntity.statusCode.value())
+    }
 
     @Test
     fun getAccount_ok() {

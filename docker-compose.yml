@@ -12,42 +12,38 @@ services:
       - "90:90"
     hostname: nginx-acc
     networks:
-      - network2
+      - network1
     depends_on:
-      - accounts-app
-      - accounts-db
+      - accounts-service-app
+      - accounts-service-db
     restart: unless-stopped
 
-  accounts-app:
+  accounts-service-app:
     container_name: accounts-app
-    image: accounts-app
+    image: manosov/accounts-minibank:latest
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_prod
     ports:
-      - "8001:8001"
+      - "9000:9000"
     depends_on:
-      - accounts-db
+      - accounts-service-db
     networks:
-      - network2
+      - network1
     restart: unless-stopped
 
-  accounts-db:
+  accounts-service-db:
     container_name: accounts-db
-    image: accounts-db
-    build:
-      context: ./
-      dockerfile: Dockerfile.postgres
+    image: postgres:12
     ports:
-      - "5434:5434"
+      - "5434:5432"
     environment:
       - PGDATA=/var/lib/postgresql/data
       - POSTGRES_PASSWORD=123456
       - POSTGRES_USER=user
     networks:
-      - network2
+      - network1
     restart: unless-stopped
 networks:
-  network2:
-    name: network2
-    driver: bridge
+  network1:
+    name: network1

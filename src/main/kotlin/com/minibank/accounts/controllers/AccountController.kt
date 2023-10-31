@@ -4,6 +4,7 @@ import com.example.minibank.dtos.exeptions.Message
 import com.minibank.accounts.dtos.AccountDTO
 import com.minibank.accounts.models.Account
 import com.minibank.accounts.service.AccountService
+import com.minibank.accounts.service.FTService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("api/v1/accounts")
 class AccountController(
     val accountService: AccountService,
+    val ftService: FTService
 ) {
 
     private val accountCanDelete: String = "accountCanDelete"
@@ -74,16 +76,18 @@ class AccountController(
     @DeleteMapping("/{id}")
     @Operation(summary = "Закрытие (удаление) счета") // TODO проверять не только по id счета, но и по userId из JWT
     fun deleteAccount(@PathVariable id: Int) {
-
+        if (!ftService.isEnabled(accountCanDelete)) {
+            println("feature $accountCanDelete is off")
+        }
         accountService.deleteAccount(id)
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Обновление данных по счету") // TODO проверять не только по id счета, но и по userId из JWT
     fun updateAccount(@PathVariable id: Int, @RequestBody body: AccountDTO): ResponseEntity<Any> {
-
+        if (!ftService.isEnabled(accountCanUpdate)) {
             return ResponseEntity.ok().body("FT $accountCanUpdate off")
-
+        }
 
         // Длина счета
         val accnumValidation = body.accnumber!!.length >= 20

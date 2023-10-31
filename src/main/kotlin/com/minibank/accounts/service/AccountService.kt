@@ -38,6 +38,7 @@ class AccountService(
         existingAccount.accnumber = body.accnumber
         existingAccount.ownerName = body.ownerName
         existingAccount.accountName = body.accountName
+        println("account $existingAccount")
         try {
             accountRepository.save(existingAccount)
         } catch (e: Exception) {
